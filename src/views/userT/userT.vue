@@ -112,35 +112,20 @@ export default {
       })
     },
     confim(){
-      // if(this.operateType === 'edit'){
-      //   axios({
-      //     methods:'POST',
-      //     url:'http://localhost:3000/dataScoure',
-      //     data:{
-      //       "title": "rongrong"+Date(),
-      //       "author": "雯雯"
-      //     }
-      //   }).then((res) =>{
-        //   console.log(res.data)
-        // }).catch((error) =>{
-        //   console.log(error)
-        // }).finally(
-        // )
-      // }else{
-        
-      // }
-      // axios.get('http://localhost:3000/dataScoure',{
-      //     // "title": "rongrong",
-      //     //   "author": "雯雯"
-      //   }).then((res) =>{
-      //     console.log(res.data)
-      //   })
-      axios.post('http://localhost:3000/dataScoure',{
+      if(this.operateType === 'edit'){
+        axios.post('http://localhost:3000/dataScoure',{
           "title": "rongrong",
             "author": "雯雯"
         }).then((res) =>{
           console.log(res.data)
-        })
+        }).catch((error) =>{
+          console.log(error)
+        }).finally(
+        )
+      }else{
+        null
+      }
+      
     },
     addUser(){
       this.isShow = true
