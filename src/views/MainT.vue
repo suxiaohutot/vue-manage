@@ -10,6 +10,7 @@
           <!-- header部分 -->
           <CommonHeader/>
         </el-header>
+        <CommonTab/>
         <el-main>
           <!-- 右边内容展示部分 -->
           <router-view></router-view>
@@ -19,11 +20,13 @@
   </div>
 </template>
 <script>
+
 export default {
   name:'MainT',
   components:{
     CommonAside: ()=> import('../components/CommonAside.vue'),
-    CommonHeader: ()=> import('../components/CommonHeader.vue')
+    CommonHeader: ()=> import('../components/CommonHeader.vue'),
+    CommonTab: ()=> import ('../components/CommonTab.vue')
   },
   data (){
     return{

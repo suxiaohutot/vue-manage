@@ -20,8 +20,11 @@
           <i :class="'el-icon-'+item.icon"></i>
           <span slot="title">{{item.label}}</span>
         </template>
-        <el-menu-item-group v-for="(subItem, subIndex) in item.children" :key="subItem.path">
-          <el-menu-item :index="subIndex+''">{{ subItem.label }}</el-menu-item>
+        <el-menu-item-group v-for="(subItem, subIndex) in item.children" :key="subItem.path" >
+          <el-menu-item :index="subIndex+''" @click="changeMenu(subItem)">
+            <i :class="subItem.icon"></i>
+            {{ subItem.label }}
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -43,8 +46,8 @@
             // url: 'Home/Home'
           },
           {
-            path: '/commodity',
-            name: 'Commodity',
+            path: '/mallT',
+            name: 'MallT',
             label: '商品管理',
             icon: 's-goods',
             // url: 'MallManage/MallManage'
@@ -61,17 +64,17 @@
             icon: 's-operation',
             children: [
               {
-                path: '/page1',
-                name: 'page1',
+                path: '/pageOne',
+                name: 'PageOne',
                 label: '其他页1',
-                icon: 'setting',
+                icon: 'el-icon-notebook-1',
                 url: 'Other/PageOne'
               },
               {
-                path: '/page2',
-                name: 'page2',
+                path: '/pageTwo',
+                name: 'PageTwo',
                 label: '其他页2',
-                icon: 'setting',
+                icon: 'el-icon-notebook-2',
                 url: 'Other/PageTwo'
               }
             ]
@@ -91,9 +94,10 @@
         this.$router.push({
           name:item.name
         })
+        // console.log('输出this试试')
+        this.$store.commit('selectMenu', item)
       },
       routerHome(){
-        console.log(12313131)
         this.$router.push({
           name:'MainT'
         })
@@ -114,7 +118,7 @@
       }
     },
     created(){
-      console.log(this.$store.state.tab.isCollapse)
+      // console.log(this.$store.state.tab.isCollapse)
     }
   }
 </script>

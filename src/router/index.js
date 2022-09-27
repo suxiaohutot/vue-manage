@@ -10,7 +10,7 @@ const routes = [
     component: () => import('../views/MainT.vue'),
     children:[
       {
-        path:'./homeT',
+        path:'/homeT',
         name:'HomeT',
         component: () => import('../views/homeT/homeT.vue'),
       },
@@ -23,7 +23,23 @@ const routes = [
         path:"/userT",
         name:'UserT',
         component: () => import('../views/userT/userT.vue')
-      }
+      },
+      {
+        path:"/mallT",
+        name:'MallT',
+        component: () => import('../views/mall/mallT.vue')
+      },
+      {
+        path:"/pageOne",
+        name:'PageOne',
+        component: () => import('../views/other/pageOne.vue')
+      },
+      {
+        path:"/pageTwo",
+        name:'PageTwo',
+        component: () => import('../views/other/pageTwo.vue')
+      },
+      
     ]
   },
   

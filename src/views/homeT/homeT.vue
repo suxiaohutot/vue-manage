@@ -104,6 +104,7 @@ export default {
           color:'#2ec7c9'
         },
       ],
+      // 折线图
       option : {
         title: {
           text: '折线图'
@@ -166,6 +167,7 @@ export default {
           }
         ]
       },
+      // 测试饼图
       option2 : {
         title: {
           text: '测试饼图',
@@ -201,6 +203,7 @@ export default {
           }
         ]
       },
+      // 柱状图
       option3 : {
         xAxis: {
           type: 'category',
@@ -226,14 +229,14 @@ export default {
   //   })
   // },
   methods:{
-    getList(){
-      axios({
-        method:'GET',
-        url:'http://localhost:3000/videoData'
-      }).then((res)=>{
-        console.log(res.data)
-      })
-    },
+    // getList(){
+    //   axios({
+    //     method:'GET',
+    //     url:'http://localhost:3000/videoData'
+    //   }).then((res)=>{
+    //     console.log(res.data)
+    //   })
+    // },
     drawEcharts(){
       const E1 = echarts.init(this.$refs.echartsZhe)
       E1.setOption(this.option)
@@ -245,7 +248,7 @@ export default {
 
   },
   created(){
-    this.getList()
+    // this.getList()
     // this.drawEcharts()
   },
   mounted(){

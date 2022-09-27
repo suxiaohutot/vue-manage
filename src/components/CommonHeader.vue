@@ -3,7 +3,10 @@
     <header>
       <div class="l-content">
         <el-button plain icon="el-icon-menu" size="mini" @click="handleMenu()"></el-button>
-        <h3 style="color:aliceblue">首页</h3>
+        <!-- <h3 style="color:aliceblue">首页</h3> -->
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item v-for="(value, index) in tags" :key="index+''" >{{ value.label }}</el-breadcrumb-item>
+        </el-breadcrumb>
       </div>
       <div class="r-content">
         <el-dropdown size="mini" trigger="click">
@@ -22,6 +25,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name:'CommonHeader',
   data() {
@@ -41,6 +46,12 @@ export default {
     // }).catch((error)=>{
     //   console.log(error)
     // })
+    // console.log(this.tags)
+  },
+  computed: {
+    ...mapState({
+      tags: state => state.tab.tabList
+    })
   }
 
 }
@@ -52,6 +63,8 @@ header{
   height: 100%;
   justify-content: space-between; //左右贴边
   align-content: center; //上下居中
+  margin: 15px 0 0 0;
+  // color: aliceblue;
 }
 .l-content{
   display: flex;
@@ -59,6 +72,7 @@ header{
   .el-button{
     margin: 0 20px 0 0;
   }
+  
 }
 .r-content{
   display: flex;
