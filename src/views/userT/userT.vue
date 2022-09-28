@@ -1,6 +1,5 @@
 <template>
   <div class="manage">
-    <!-- <el-button @click="getList()">显示数据</el-button> -->
     <el-dialog
       :title="operateType === 'add' ? '新增用户' : '编辑用户' "
       :visible.sync="isShow"
@@ -28,13 +27,24 @@
         <el-button type="primary" @click="getList">搜索</el-button>
       </Common-from>
     </div>
-    <el-button @click="confim">测试数据按钮</el-button>
+    <!-- 封装的表格组件 -->
+    <Common-table
+      :tableData="tableData"
+      :tableLabel="tableLabel"
+      :config="config"
+      @changePage="getList()"
+      @edit="editUser()"
+      @del="delUser()"
+    >
+    </Common-table>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import CommonFrom from '@/components/CommonFrom.vue';
+import CommonTable from '@/components/CommonTable.vue';
+import {_tableLabel, _operateFormLabel } from  './config'
 
 export default {
   name:'UserT',
@@ -42,48 +52,11 @@ export default {
     return{
       operateType:'add',
       isShow: false,
-      operateFormLabel:[
-        {
-          model:'name',
-          label:'姓名',
-          type:'input',
-        },
-        {
-          model:'age',
-          label:'年龄',
-          type:'input',
-        },
-        {
-          model:'sex',
-          label:'性别',
-          type:'select',
-          opts: [
-            {
-              label: '男',
-              value: 1 
-            },
-            {
-              label: '女',
-              value: 2 
-            },
-          ]
-        },
-        {
-          model:'birth',
-          label:'出生日期',
-          type:'date',
-        },
-        {
-          model:'addr',
-          label:'地址',
-          type:'input',
-        },
-      ],
       operateFrom:{
         name: '',
         addr: '',
         age: '',
-        brith: '',
+        birth: '',
         sex: '',
       },
       formLabel:[
@@ -95,53 +68,85 @@ export default {
       ],
       sacherFrom:{
         keyword:''
-      }
-
+      },
+      // table表数据
+      tableData:[],
+      // 页码 内容
+      config:{
+        page:1,
+        total:30,
+      },
     }
   },
   components:{
     CommonFrom,
+    CommonTable,   //封装表格 引用
 },
   methods:{
-    getList1(){
-      axios({
-        method:'GET',
-        url:'http://localhost:3000/dataScoure'
-      }).then((res)=>{
-        console.log(res.data)
+    // 新增 / 编辑 
+    confim(){
+      axios.post('http://localhost:3000/userData',{
+        ...this.operateFrom
+      }).them( (res) => {
+        console.log(res)
+        this.isShow = true //完事关闭弹窗
+        this.getList() //更新页面数据
       })
     },
-    confim(){
-      if(this.operateType === 'edit'){
-        axios.post('http://localhost:3000/dataScoure',{
-          "title": "rongrong",
-            "author": "雯雯"
-        }).then((res) =>{
-          console.log(res.data)
-        }).catch((error) =>{
-          console.log(error)
-        }).finally(
-        )
-      }else{
-        null
-      }
-      
-    },
+    // 新建 窗口
     addUser(){
       this.isShow = true
       this.operateType = 'add'
+      //新增页面  将数据初始化 
       this.operateFrom = {
-        name: '',
-        addr: '',
-        age: '',
-        brith: '',
-        sex: '',
+        // name: '',
+        // addr: '',
+        // age: '',
+        // birth: '',
+        // sex: '',
+        ...this.operateFrom
       }
     },
-    getList(){
-
+    // 获取列表
+    getList(name = ''){
+      this.config.loading = true
+      name ? (this.config.page - 1) : ''
+      axios.get('http://localhost:3000/userData',{
+      }).then(res =>{
+        console.log(res)
+        this.tableData = res.data.map(item=>{
+          item.sex = item.sex === 1 ? '男' : '女'
+          return item
+        })
+        this.config.total = res.data.length
+        this.config.loading = false
+      })
+    },
+    // 编辑列表信息
+    editUser(val){
+      console.log(val)
+      this.operateType = 'edit'
+      this.isShow = true
+      this.operateFrom = val
+    },
+    // 删除用户信息
+    delUser(val){
+      console.log(val.row)
+      // axios.put('http://localhost:3000/userData/'+val.id,{})
     },
 
+  },
+  // 计算函数
+  computed:{
+    tableLabel(){
+      return _tableLabel
+    },
+    operateFormLabel(){
+      return _operateFormLabel
+    }
+  },
+  created(){
+    this.getList()
   }
 }
 </script>

@@ -4,7 +4,7 @@
       v-for="(tab, index) in tags" 
       :key="tab.name"
       :closable="tab.name !== 'HomeT'"
-      :effect="$route.name === tab.name ? 'dark ': 'plain' "
+      :effect="($route?.name === tab?.name) ? 'dark ': 'plain' "
       @click="changeMenu(tab)"
       @close="handlClose(tab,index)"
     >
