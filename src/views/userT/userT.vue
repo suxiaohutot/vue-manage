@@ -1,5 +1,6 @@
 <template>
   <div class="manage">
+    <!-- Dialog 对话框 -->
     <el-dialog
       :title="operateType === 'add' ? '新增用户' : '编辑用户' "
       :visible.sync="isShow"
@@ -33,8 +34,8 @@
       :tableLabel="tableLabel"
       :config="config"
       @changePage="getList()"
-      @edit="editUser()"
-      @del="delUser()"
+      @edit="editUser"
+      @del="delUser"
     >
     </Common-table>
   </div>
@@ -73,9 +74,16 @@ export default {
       tableData:[],
       // 页码 内容
       config:{
-        page:1,
-        total:30,
+        page:1, // 当前页码
+        pagesize:9, // 每页的数据条数
+        total:10, // 总条数
       },
+    }
+  },
+  watch:{
+    tableData(val){
+      // this.config.total = val.length
+      console.log(val)
     }
   },
   components:{
@@ -85,13 +93,37 @@ export default {
   methods:{
     // 新增 / 编辑 
     confim(){
-      axios.post('http://localhost:3000/userData',{
-        ...this.operateFrom
-      }).them( (res) => {
-        console.log(res)
-        this.isShow = true //完事关闭弹窗
-        this.getList() //更新页面数据
-      })
+      if(this.operateType === 'add'){
+        if(this?.operateFrom?.name != ''){
+          axios.post('http://localhost:3000/userData',{
+            ...this.operateFrom
+          }).then( (res) => {
+            console.log(res)
+            this.isShow = false //完事关闭弹窗
+            this.getList() //更新页面数据
+          })
+        }else{
+          this.$alert('用户名为空，请勿保存空数据')
+        }
+      }else if(this.operateType === 'edit'){
+        if(this?.operateFrom?.name != ''){
+          axios.put('http://localhost:3000/userData'+'/'+this?.operateFrom?.id,{
+            name: this.operateFrom.name,
+            addr: this.operateFrom.addr,
+            age: this.operateFrom.age,
+            birth: this.operateFrom.birth,
+            sex: this.operateFrom.sex,
+          }).then((res) => {
+            console.log(res)
+            this.isShow = false //完事关闭弹窗
+            this.getList() //更新页面数据
+          })
+        }else{
+          this.$alert('用户名为空，请勿保存空数据')
+        }
+      }
+      
+      
     },
     // 新建 窗口
     addUser(){
@@ -99,12 +131,12 @@ export default {
       this.operateType = 'add'
       //新增页面  将数据初始化 
       this.operateFrom = {
-        // name: '',
-        // addr: '',
-        // age: '',
-        // birth: '',
-        // sex: '',
-        ...this.operateFrom
+        name: '',
+        addr: '',
+        age: '',
+        birth: '',
+        sex: '',
+        // ...this.operateFrom
       }
     },
     // 获取列表
@@ -113,7 +145,7 @@ export default {
       name ? (this.config.page - 1) : ''
       axios.get('http://localhost:3000/userData',{
       }).then(res =>{
-        console.log(res)
+        // console.log(res)
         this.tableData = res.data.map(item=>{
           item.sex = item.sex === 1 ? '男' : '女'
           return item
@@ -131,8 +163,17 @@ export default {
     },
     // 删除用户信息
     delUser(val){
-      console.log(val.row)
-      // axios.put('http://localhost:3000/userData/'+val.id,{})
+      this.$confirm("此操作会删除用户信息，是否继续？", "提示", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() =>{
+        console.log(val.id)
+        axios.delete('http://localhost:3000/userData/'+'/'+val.id)
+        .then(()=>{
+          this.getList()
+        })
+      })
     },
 
   },

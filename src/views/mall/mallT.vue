@@ -11,7 +11,18 @@ export default {
     return {
 
     }
-  }
+  },
+  methods:{
+    getLocalData(){
+      let result1 = JSON.parse(localStorage.getItem('textLocal'))
+      // return result1
+      console.log(result1)
+    }
+  },
+  created() {
+    this.getLocalData()
+  },
+  
 }
 </script>
 

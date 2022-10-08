@@ -10,7 +10,7 @@
         </el-input>
         <el-switch 
           v-if="item.type === 'switch'" 
-          v-model="form[item.model]" 
+          v-model="form[item.model]"
         >
         </el-switch>
         <el-date-picker 
