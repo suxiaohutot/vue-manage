@@ -8,6 +8,7 @@ import http from 'axios'
 // import './api/mock.js'
 import * as echarts from 'echarts'
 import Router from 'vue-router'
+import Cookie from 'js-cookie'
 
 
 Vue.prototype.$echarts = echarts;
@@ -21,6 +22,22 @@ const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
+
+// 添加全局路由前置导航守卫
+router.beforeEach((to, from, next) => {
+  // 判断token是否存在
+  const token = Cookie.get('token')
+  console.log(token)
+  if(!token && to.name !== 'LoginT'){
+    next({name:'LoginT'})
+    console.log('loginT')
+  }else if(token && to.name === 'LoginT'){
+    next({name:'HomeT'})
+    console.log('HomeT')
+  }else{
+    next()
+  }
+})
 
 
 new Vue({

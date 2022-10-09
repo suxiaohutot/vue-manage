@@ -33,7 +33,7 @@
       :tableData="tableData"
       :tableLabel="tableLabel"
       :config="config"
-      @changePage="getList()"
+      @changePage="handleCurrentChange"
       @edit="editUser"
       @del="delUser"
     >
@@ -154,6 +154,11 @@ export default {
         this.config.loading = false
       })
     },
+    // 表格分页事件 当前页改变时触发 跳转其他页
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.config.page = val;
+    },
     // 编辑列表信息
     editUser(val){
       console.log(val)
@@ -197,5 +202,8 @@ export default {
   display: flex;
   justify-content: space-between; //左右对齐
   align-items: center; //上下对齐
+}
+.manage{
+  height: 90%;
 }
 </style>

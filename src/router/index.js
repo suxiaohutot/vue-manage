@@ -42,6 +42,11 @@ const routes = [
       
     ]
   },
+  {
+    path: '/loginT',
+    name:'LoginT',
+    component: () => import('../views/Login/LoginT.vue')
+  }
   
 ]
 

@@ -1,6 +1,6 @@
 <template>
   <div class="common-table">
-    <el-table :data="tableData" stripe border>
+    <el-table :data="tableData.slice((config.page-1) * config.pageSize, config.page * config.pagesize)" stripe border>
     <!-- height="90%"  -->
       <el-table-column
         show-overflow-tooltip
@@ -23,7 +23,7 @@
     <el-pagination
       class="pager pagin"
       layout="prev, pager, next"
-      :total="config.total"
+      :total="tableData.length"
       :current-page.sync="config.page"
       @current-change="changePage"
       :page-size="5"
@@ -37,6 +37,7 @@ export default {
   name:'CommonTable',
   data() {
     return {
+      // currentpage:'',
     }
   },
   props: {
@@ -67,6 +68,11 @@ export default {
     changePage(page){
       this.$emit('changePage', page)
     }
+    // 表格分页事件 当前页改变时触发 跳转其他页
+    // handleCurrentChange(val) {
+    //   console.log(`当前页: ${val}`);
+    //   this.currentPage = val;
+    // },
   },
 
 }
