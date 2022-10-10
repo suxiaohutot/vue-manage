@@ -9,14 +9,14 @@
         </el-breadcrumb>
       </div>
       <div class="r-content">
-        <el-dropdown size="mini" trigger="click">
+        <el-dropdown size="mini" trigger="click" @command="handleClick">
           <span style="color:aliceblue">
             <!-- 我的 -->
             <i class="el-icon-s-custom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>个人中心</el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
+            <el-dropdown-item command="cancel">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -26,6 +26,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import Cookie from 'js-cookie'
 
 export default {
   name:'CommonHeader',
@@ -37,6 +38,13 @@ export default {
   methods:{
     handleMenu(){
       this.$store.commit('collapseMenu')
+    },
+    handleClick(command){
+      if(command === 'cancel'){
+        Cookie.remove('token')
+        this.$router.push('./loginT')
+      }
+      
     }
   },
   mounted(){

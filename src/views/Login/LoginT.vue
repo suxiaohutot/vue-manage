@@ -6,7 +6,7 @@
         <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" placeholder="请输入密码" type="password"></el-input>
+        <el-input v-model="form.password" placeholder="请输入密码" type="password" @keyup.enter.native="clickEnter"></el-input>
       </el-form-item>
       <el-form-item class="login-item">
         <el-button type="primary" class="login-but" @click="submit">登录</el-button>
@@ -17,6 +17,7 @@
 
 <script>
 import Cookie from 'js-cookie'
+import axios from 'axios';
 export default {
   name:'LoginT',
   data() {
@@ -48,28 +49,47 @@ export default {
         let index = Math.floor(Math.random() * 36); 
         code += random[index];
       }
-      this.token = code,
+      this.token = code
       console.log(code)
+    },
+    // 回车事件
+    clickEnter(){
+      this.submit()
     },
     //登录
     submit(){
-      // 获取 token
-      let token = this.token
-      // 将token信息存入cookie
-      Cookie.set('token',token)
-      this.$message({
-        message: '登录成功',
-        type: 'success',
-        duration:1000,
-        onClose:()=>{
-          this.$router.push('./homeT')
+      axios.get('http://localhost:3000/user')
+        .then( (res)=>{
+        console.log(res.data)
+        console.log(this.form)
+        if(this.form.username === res.data.username && this.form.password === res.data.password){
+          // 假装token的获取
+          this.createCode()
+          // 获取 token
+          let token = this.token
+          // 将token信息存入cookie
+          Cookie.set('token',token)
+          // 提示信息
+          this.$message({
+            message: '登录成功',
+            type: 'success',
+            // 操作成功 1秒后跳转至首页
+            duration:1000,
+            onClose:()=>{
+              this.$router.push('./homeT')
+            }
+          });
+        }else{
+          this.$message('用户名或密码错误')
         }
-      });
-      
-    }
+      }).catch((error)=>{
+        console.log(error)
+      }) 
+    },
+    
   },
   created(){
-    this.createCode()
+    // this.createCode()
   }
 }
 </script>

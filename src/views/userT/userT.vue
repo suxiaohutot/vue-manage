@@ -18,14 +18,14 @@
       </div>
     </el-dialog>
     <div class="manage-header">
-      <el-button type="primary" @click="addUser">新增</el-button>
+      <el-button type="primary" @click="addUser" size="small">新增</el-button>
       <Common-from
         :formLabel="formLabel"
         :form="sacherFrom"
         :inline="true"
         ref="form"
       >
-        <el-button type="primary" @click="getList">搜索</el-button>
+        <el-button type="primary" @click="getList" size="small">搜索</el-button>
       </Common-from>
     </div>
     <!-- 封装的表格组件 -->
